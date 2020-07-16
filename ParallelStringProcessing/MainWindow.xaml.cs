@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using ParallelStringProcessing.Classes;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,7 +30,13 @@ namespace ParallelStringProcessing
 
         private void button_Click(object sender, RoutedEventArgs e)
         {
-
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string[] lines = File.ReadAllLines(openFileDialog.FileName);
+                MainProcessing.LoadStringsFromFile(ref lines);
+                MainProcessing.Execute();
+            }
         }
     }
 }
