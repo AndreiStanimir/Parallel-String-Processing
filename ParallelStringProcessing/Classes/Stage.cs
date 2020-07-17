@@ -1,20 +1,18 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ParallelStringProcessing.Classes
 {
-    class Stage
+    internal class Stage
     {
         public Queue<StringOperations> Operations { get; private set; }
-        
-        Stage()
+
+        private Stage()
         {
             Operations = null;
         }
+
         public Stage(StringOperations[] operations)
         {
             if (operations.Count() > 5)

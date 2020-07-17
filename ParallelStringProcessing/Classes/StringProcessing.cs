@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace ParallelStringProcessing.Classes
 {
-    class StringProcessing : IStringProcessingMethods
+    internal class StringProcessing : IStringProcessingMethods
     {
-        StringBuilder s;
-        Queue<Action> commands = new Queue<Action>();
+        private StringBuilder s;
+        private Queue<Action> commands = new Queue<Action>();
 
         #region String Operations
 
@@ -21,6 +19,7 @@ namespace ParallelStringProcessing.Classes
             s.Clear();
             s.Append(new string(sortedLetters));
         }
+
         public void Invert()
         {
             for (int i = 0, j = s.Length - 1; i < j; i++, j--)
@@ -28,6 +27,7 @@ namespace ParallelStringProcessing.Classes
                 (s[i], s[j]) = (s[j], s[i]);
             }
         }
+
         public void UpperCase()
         {
             for (int i = 0; i < s.Length; i++)
@@ -35,6 +35,7 @@ namespace ParallelStringProcessing.Classes
                 s[i] = char.ToUpper(s[i]);
             }
         }
+
         public void LowerCase()
         {
             for (int i = 0; i < s.Length; i++)
@@ -42,7 +43,9 @@ namespace ParallelStringProcessing.Classes
                 s[i] = char.ToLower(s[i]);
             }
         }
-        #endregion
+
+        #endregion String Operations
+
         public bool Execute()
         {
             try
@@ -60,15 +63,18 @@ namespace ParallelStringProcessing.Classes
             }
             return true;
         }
+
         public void EnqueueAction(Action action)
         {
             //check if valid
             commands.Enqueue(action);
         }
+
         public void SetQueue(Queue<Action> actions)
         {
             commands = actions;
         }
+
         public StringProcessing(StringBuilder s)
         {
             this.s = s;
@@ -82,10 +88,10 @@ namespace ParallelStringProcessing.Classes
         {
             this.s = s;
         }
+
         public StringBuilder GetString()
         {
             return s;
         }
-
     }
 }
