@@ -37,6 +37,7 @@ namespace ParallelStringProcessing.Classes
         {
             try
             {
+                var commands = new Queue<Action>(this.commands);
                 while (commands.Count > 0)
                 {
                     commands.Dequeue().Invoke();

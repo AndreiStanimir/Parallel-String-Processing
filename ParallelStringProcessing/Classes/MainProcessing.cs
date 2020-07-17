@@ -45,6 +45,7 @@ namespace ParallelStringProcessing.Classes
                 tasks.Add(thread);
                 currentStringIndex += 1;
             }
+            currentStringIndex -= 1;
             StringBuilder dummy;
             object indexLock = new object();
             while (true)
@@ -64,7 +65,6 @@ namespace ParallelStringProcessing.Classes
             }
 
             Task.WaitAll(tasks.ToArray());
-            //strings = new BlockingCollection<StringBuilder>(processedStrings);//????
             WriteToFile("out.txt");
         }
         static void WriteToFile(String filename)
