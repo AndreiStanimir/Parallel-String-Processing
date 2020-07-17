@@ -32,6 +32,7 @@ namespace ParallelStringProcessing.Classes
             while (stages.Count > 0)
             {
                 List<StringOperations> currentStage = stages.Dequeue().ToList();
+                currentStringIndex =0;
                 for (int i = 0; i < sps.Length; i++)
                 {
                     sps[i] = new StringProcessing(strings[i]);
@@ -81,6 +82,12 @@ namespace ParallelStringProcessing.Classes
                     break;
                 case StringOperations.Sort:
                     sps[i].EnqueueAction(sps[i].Sort);
+                    break;
+                case StringOperations.LowerCase:
+                    sps[i].EnqueueAction(sps[i].LowerCase);
+                    break;
+                case StringOperations.Invert:
+                    sps[i].EnqueueAction(sps[i].Invert);
                     break;
                 default:
                     break;

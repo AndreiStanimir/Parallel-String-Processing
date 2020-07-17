@@ -8,6 +8,6 @@ namespace ParallelStringProcessing.Classes
 {
     enum StringOperations
     {
-        Uppercase,LowerCase,Sort
+        Uppercase,LowerCase,Sort,Invert
     }
 }

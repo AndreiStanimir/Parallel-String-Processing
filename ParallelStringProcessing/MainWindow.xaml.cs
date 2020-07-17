@@ -38,7 +38,12 @@ namespace ParallelStringProcessing
                 StringProcessing s = new StringProcessing();
                 Queue<StringOperations> stage1 = new Queue<StringOperations>(new StringOperations[] {StringOperations.Uppercase,StringOperations.Sort});
                 Queue<Queue<StringOperations>> stages = new Queue<Queue<StringOperations>>();
+                var stage2 = new Queue<StringOperations>(new StringOperations[] { StringOperations.Invert });
+                var stage3 = new Queue<StringOperations>(new StringOperations[] { StringOperations.LowerCase });
+
                 stages.Enqueue(stage1);
+                stages.Enqueue(stage2);
+                //stages.Enqueue(stage3);
                 MainProcessing.Execute(stages);
             }
         }

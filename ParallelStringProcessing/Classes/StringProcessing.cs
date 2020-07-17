@@ -12,6 +12,8 @@ namespace ParallelStringProcessing.Classes
         StringBuilder s;
         Queue<Action> commands = new Queue<Action>();
 
+        #region String Operations
+
         public void Sort()
         {
             var sortedLetters = s.ToString().ToCharArray();
@@ -40,6 +42,7 @@ namespace ParallelStringProcessing.Classes
                 s[i] = char.ToLower(s[i]);
             }
         }
+        #endregion
         public bool Execute()
         {
             try
