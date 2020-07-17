@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace ParallelStringProcessing.Classes
 {
-    class StringProcessing
+    class StringProcessing : IStringProcessingMethods
     {
-        StringBuilder s ;
-        Queue<Action> commands=new Queue<Action>();
+        StringBuilder s;
+        Queue<Action> commands = new Queue<Action>();
 
         public void Sort()
         {
@@ -20,9 +21,9 @@ namespace ParallelStringProcessing.Classes
         }
         public void Reverse()
         {
-            for (int i = 0,j=s.Length-1; i<j; i++,j--)
+            for (int i = 0, j = s.Length - 1; i < j; i++, j--)
             {
-                (s[i],s[j])=(s[j],s[i]);
+                (s[i], s[j]) = (s[j], s[i]);
             }
         }
         public void UpperCase()
@@ -32,16 +33,25 @@ namespace ParallelStringProcessing.Classes
                 s[i] = char.ToUpper(s[i]);
             }
         }
-        public void Execute()
+        public bool Execute()
         {
-            while(commands.Count>0)
+            try
             {
-                commands.Dequeue().Invoke();
+                while (commands.Count > 0)
+                {
+                    commands.Dequeue().Invoke();
+                }
             }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                return false;
+            }
+            return true;
         }
         public void QueueAction(Action action)
         {
-            //check
+            //check if valid
             commands.Enqueue(action);
         }
         public StringProcessing(StringBuilder s)
@@ -52,5 +62,10 @@ namespace ParallelStringProcessing.Classes
         {
             this.s = s;
         }
+        public StringBuilder GetString()
+        {
+            return s;
+        }
+
     }
 }
