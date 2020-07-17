@@ -36,10 +36,10 @@ namespace ParallelStringProcessing
                 string[] lines = File.ReadAllLines(openFileDialog.FileName);
                 MainProcessing.LoadStringsFromFile(ref lines);
                 StringProcessing s = new StringProcessing();
-                Queue<StringOperations> stage1 = new Queue<StringOperations>(new StringOperations[] {StringOperations.Uppercase,StringOperations.Sort});
-                Queue<Queue<StringOperations>> stages = new Queue<Queue<StringOperations>>();
-                var stage2 = new Queue<StringOperations>(new StringOperations[] { StringOperations.Invert });
-                var stage3 = new Queue<StringOperations>(new StringOperations[] { StringOperations.LowerCase });
+                var stage1 = new Stage(new StringOperations[] {StringOperations.Uppercase,StringOperations.Sort});
+                Queue<Stage> stages = new Queue<Stage>();
+                var stage2 = new Stage(new StringOperations[] { StringOperations.Invert });
+                var stage3 = new Stage(new StringOperations[] { StringOperations.LowerCase });
 
                 stages.Enqueue(stage1);
                 stages.Enqueue(stage2);

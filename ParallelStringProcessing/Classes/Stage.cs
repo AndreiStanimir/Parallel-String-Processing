@@ -9,6 +9,20 @@ namespace ParallelStringProcessing.Classes
 {
     class Stage
     {
-        
+        public Queue<StringOperations> Operations { get; }
+        //{
+        //    get { return operations; }
+        //    set => operations = value;
+        //}
+        Stage()
+        {
+            Operations = null;
+        }
+        public Stage(StringOperations[] operations)
+        {
+            if (operations.Count() > 5)
+                Array.Resize(ref operations, 5);
+            this.Operations = new Queue<StringOperations>(operations);
+        }
     }
 }

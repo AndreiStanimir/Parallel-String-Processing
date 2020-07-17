@@ -14,7 +14,7 @@ namespace ParallelStringProcessing.Classes
     static class MainProcessing
     {
         //static List<StringBuilder> strings;
-        const int THREAD_NUMBER = 5;
+        const int NUMBER_OF_THREADS = 5;
         static StringProcessing[] sps;
         static List<StringBuilder> strings;
         static int currentStringIndex;
@@ -26,23 +26,15 @@ namespace ParallelStringProcessing.Classes
                 strings.Add(new StringBuilder().Append(s));
             }
         }
-        public static async void Execute(Queue<Queue<StringOperations>> stages)
+        public static void Execute(Queue<Stage> stages)
         {
-            sps = new StringProcessing[Math.Min(THREAD_NUMBER, strings.Count)];
+            sps = new StringProcessing[Math.Min(NUMBER_OF_THREADS, strings.Count)];
+            
             while (stages.Count > 0)
             {
-                List<StringOperations> currentStage = stages.Dequeue().ToList();
-                currentStringIndex =0;
-                for (int i = 0; i < sps.Length; i++)
-                {
-                    sps[i] = new StringProcessing(strings[i]);
-                    foreach (var command in currentStage)
-                    {
-                        ParseCommand(i, command, sps);
-                    }
-                }
-                List<Task<bool>> tasks = new List<Task<bool>>(THREAD_NUMBER);
-
+                InitializeStringProcesssingCommands(stages);
+                
+                List<Task<bool>> tasks = new List<Task<bool>>(NUMBER_OF_THREADS);
                 for (int i = 0; i < sps.Length; i++)
                 {
                     Task<bool> thread = Task<bool>.Run(sps[i].Execute);
@@ -72,6 +64,20 @@ namespace ParallelStringProcessing.Classes
             WriteToFile("out.txt");
         }
 
+        private static void InitializeStringProcesssingCommands(Queue<Stage> stages)
+        {
+            List<StringOperations> currentStage = stages.Dequeue().Operations.ToList();
+            currentStringIndex = 0;
+            for (int i = 0; i < sps.Length; i++)
+            {
+                sps[i] = new StringProcessing(strings[i]);
+                foreach (var command in currentStage)
+                {
+                    ParseCommand(i, command, sps);
+                }
+            }
+        }
+
         private static void ParseCommand(int i, StringOperations command, StringProcessing[] sps)
         {
 
@@ -91,7 +97,6 @@ namespace ParallelStringProcessing.Classes
                     break;
                 default:
                     break;
-
 
             }
         }
