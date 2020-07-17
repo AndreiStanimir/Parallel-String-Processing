@@ -15,23 +15,24 @@ namespace ParallelStringProcessing.Classes
     {
         //static List<StringBuilder> strings;
         const int THREAD_NUMBER = 5;
-        static StringProcessing[] sps = new StringProcessing[THREAD_NUMBER];
-        static BlockingCollection<StringBuilder> strings;
+        static StringProcessing[] sps;
+        static List<StringBuilder> strings;
+        static int currentStringIndex;
         public static void LoadStringsFromFile(ref string[] newStrings)
         {
-            strings = new BlockingCollection<StringBuilder>(newStrings.Length);
+            strings = new List<StringBuilder>(newStrings.Length);
             foreach (string s in newStrings)
             {
                 strings.Add(new StringBuilder().Append(s));
             }
-            strings.CompleteAdding();
         }
         public static async void Execute()
         {
+            sps = new StringProcessing[Math.Min(THREAD_NUMBER, strings.Count)];
             ConcurrentBag<StringBuilder> processedStrings = new ConcurrentBag<StringBuilder>();
             for (int i = 0; i < sps.Length; i++)
             {
-                sps[i] = new StringProcessing(strings.Take());
+                sps[i] = new StringProcessing(strings[i]);
 
                 sps[i].QueueAction(sps[i].UpperCase);
                 sps[i].QueueAction(sps[i].Sort);
@@ -42,31 +43,37 @@ namespace ParallelStringProcessing.Classes
             {
                 Task<bool> thread = Task<bool>.Run(sps[i].Execute);
                 tasks.Add(thread);
+                currentStringIndex += 1;
             }
             StringBuilder dummy;
+            object indexLock = new object();
             while (true)
             {
                 int index = Task.WaitAny(tasks.ToArray());
-                lock (processedStrings)
+                lock (indexLock)
                 {
-                    processedStrings.Add(sps[index].GetString());
-                    
-                    if (strings.TryTake(out dummy))
-                        sps[index].SetString(dummy);
+                    currentStringIndex += 1;
+                    if (currentStringIndex < strings.Count)
+                    {
+                        sps[index].SetString(strings[currentStringIndex]);
+                        tasks[index] = Task<bool>.Run(sps[index].Execute);
+                    }
                     else
                         break;
-                    tasks[index] = Task<bool>.Run(sps[index].Execute);
                 }
             }
+
             Task.WaitAll(tasks.ToArray());
-            strings = new BlockingCollection<StringBuilder>(processedStrings);//????
+            //strings = new BlockingCollection<StringBuilder>(processedStrings);//????
             WriteToFile("out.txt");
         }
-
         static void WriteToFile(String filename)
         {
             System.IO.File.WriteAllLines(filename, Array.ConvertAll(strings.ToArray(), x => x.ToString()));
         }
 
     }
+
+
 }
+
