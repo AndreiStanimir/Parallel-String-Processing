@@ -9,11 +9,8 @@ namespace ParallelStringProcessing.Classes
 {
     class Stage
     {
-        public Queue<StringOperations> Operations { get; }
-        //{
-        //    get { return operations; }
-        //    set => operations = value;
-        //}
+        public Queue<StringOperations> Operations { get; private set; }
+        
         Stage()
         {
             Operations = null;
