@@ -35,7 +35,11 @@ namespace ParallelStringProcessing
             {
                 string[] lines = File.ReadAllLines(openFileDialog.FileName);
                 MainProcessing.LoadStringsFromFile(ref lines);
-                MainProcessing.Execute();
+                StringProcessing s = new StringProcessing();
+                Queue<StringOperations> stage1 = new Queue<StringOperations>(new StringOperations[] {StringOperations.Uppercase,StringOperations.Sort});
+                Queue<Queue<StringOperations>> stages = new Queue<Queue<StringOperations>>();
+                stages.Enqueue(stage1);
+                MainProcessing.Execute(stages);
             }
         }
     }

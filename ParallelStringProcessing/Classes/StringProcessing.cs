@@ -19,7 +19,7 @@ namespace ParallelStringProcessing.Classes
             s.Clear();
             s.Append(new string(sortedLetters));
         }
-        public void Reverse()
+        public void Invert()
         {
             for (int i = 0, j = s.Length - 1; i < j; i++, j--)
             {
@@ -31,6 +31,13 @@ namespace ParallelStringProcessing.Classes
             for (int i = 0; i < s.Length; i++)
             {
                 s[i] = char.ToUpper(s[i]);
+            }
+        }
+        public void LowerCase()
+        {
+            for (int i = 0; i < s.Length; i++)
+            {
+                s[i] = char.ToLower(s[i]);
             }
         }
         public bool Execute()
@@ -50,15 +57,24 @@ namespace ParallelStringProcessing.Classes
             }
             return true;
         }
-        public void QueueAction(Action action)
+        public void EnqueueAction(Action action)
         {
             //check if valid
             commands.Enqueue(action);
+        }
+        public void SetQueue(Queue<Action> actions)
+        {
+            commands = actions;
         }
         public StringProcessing(StringBuilder s)
         {
             this.s = s;
         }
+
+        public StringProcessing()
+        {
+        }
+
         public void SetString(StringBuilder s)
         {
             this.s = s;

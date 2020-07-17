@@ -66,6 +66,7 @@
     <Compile Include="Classes\IStringProcessingMethods.cs" />
     <Compile Include="Classes\MainProcessing.cs" />
     <Compile Include="Classes\Stage.cs" />
+    <Compile Include="Classes\StringOperations.cs" />
     <Compile Include="Classes\StringProcessing.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

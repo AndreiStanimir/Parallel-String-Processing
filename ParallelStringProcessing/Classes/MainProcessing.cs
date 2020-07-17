@@ -26,53 +26,76 @@ namespace ParallelStringProcessing.Classes
                 strings.Add(new StringBuilder().Append(s));
             }
         }
-        public static async void Execute()
+        public static async void Execute(Queue<Queue<StringOperations>> stages)
         {
             sps = new StringProcessing[Math.Min(THREAD_NUMBER, strings.Count)];
-            ConcurrentBag<StringBuilder> processedStrings = new ConcurrentBag<StringBuilder>();
-            for (int i = 0; i < sps.Length; i++)
+            while (stages.Count > 0)
             {
-                sps[i] = new StringProcessing(strings[i]);
-
-                sps[i].QueueAction(sps[i].UpperCase);
-                sps[i].QueueAction(sps[i].Sort);
-                //sps[i].Execute();
-            }
-            List<Task<bool>> tasks = new List<Task<bool>>(THREAD_NUMBER);
-            for (int i = 0; i < sps.Length; i++)
-            {
-                Task<bool> thread = Task<bool>.Run(sps[i].Execute);
-                tasks.Add(thread);
-                currentStringIndex += 1;
-            }
-            currentStringIndex -= 1;
-            StringBuilder dummy;
-            object indexLock = new object();
-            while (true)
-            {
-                int index = Task.WaitAny(tasks.ToArray());
-                lock (indexLock)
+                List<StringOperations> currentStage = stages.Dequeue().ToList();
+                for (int i = 0; i < sps.Length; i++)
                 {
-                    currentStringIndex += 1;
-                    if (currentStringIndex < strings.Count)
+                    sps[i] = new StringProcessing(strings[i]);
+                    foreach (var command in currentStage)
                     {
-                        sps[index].SetString(strings[currentStringIndex]);
-                        tasks[index] = Task<bool>.Run(sps[index].Execute);
+                        ParseCommand(i, command, sps);
                     }
-                    else
-                        break;
                 }
-            }
+                List<Task<bool>> tasks = new List<Task<bool>>(THREAD_NUMBER);
 
-            Task.WaitAll(tasks.ToArray());
+                for (int i = 0; i < sps.Length; i++)
+                {
+                    Task<bool> thread = Task<bool>.Run(sps[i].Execute);
+                    tasks.Add(thread);
+                    currentStringIndex += 1;
+                }
+                currentStringIndex -= 1;
+                object indexLock = new object();
+                while (true)
+                {
+                    int index = Task.WaitAny(tasks.ToArray());
+                    lock (indexLock)
+                    {
+                        currentStringIndex += 1;
+                        if (currentStringIndex < strings.Count)
+                        {
+                            sps[index].SetString(strings[currentStringIndex]);
+                            tasks[index] = Task<bool>.Run(sps[index].Execute);
+                        }
+                        else
+                            break;
+                    }
+                }
+
+                Task.WaitAll(tasks.ToArray());
+            }
             WriteToFile("out.txt");
         }
+
+        private static void ParseCommand(int i, StringOperations command, StringProcessing[] sps)
+        {
+
+            switch (command)
+            {
+                case StringOperations.Uppercase:
+                    sps[i].EnqueueAction(sps[i].UpperCase);
+                    break;
+                case StringOperations.Sort:
+                    sps[i].EnqueueAction(sps[i].Sort);
+                    break;
+                default:
+                    break;
+
+
+            }
+        }
+
         static void WriteToFile(String filename)
         {
             System.IO.File.WriteAllLines(filename, Array.ConvertAll(strings.ToArray(), x => x.ToString()));
         }
 
     }
+
 
 
 }

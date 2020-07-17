@@ -2,7 +2,7 @@
 {
     interface IStringProcessingMethods
     {
-        void Reverse();
+        void Invert();
         void Sort();
         void UpperCase();
     }
