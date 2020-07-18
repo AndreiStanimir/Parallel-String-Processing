@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace ParallelStringProcessing.Classes
 {
     internal static class MainProcessing
     {
-        //static List<StringBuilder> strings;
         private const int NUMBER_OF_THREADS = 5;
 
         private static StringProcessing[] sps;
@@ -49,7 +49,7 @@ namespace ParallelStringProcessing.Classes
                         currentStringIndex += 1;
                         if (currentStringIndex < strings.Count)
                         {
-                            sps[index].SetString(strings[currentStringIndex]);
+                            sps[index].S=strings[currentStringIndex];
                             tasks[index] = Task<bool>.Run(sps[index].Execute);
                         }
                         else
@@ -59,7 +59,6 @@ namespace ParallelStringProcessing.Classes
 
                 Task.WaitAll(tasks.ToArray());
             }
-            WriteToFile("out.txt");
         }
 
         private static void InitializeStringProcesssingCommands(Queue<Stage> stages)
@@ -71,37 +70,43 @@ namespace ParallelStringProcessing.Classes
                 sps[i] = new StringProcessing(strings[i]);
                 foreach (var command in currentStage)
                 {
-                    ParseCommand(i, command, sps);
+                    try
+                    {
+                        ParseCommand(command, sps[i]);
+                    }
+                    catch(NotImplementedException e)
+                    {
+                        MessageBox.Show(e.Message);
+                    }
                 }
             }
         }
 
-        private static void ParseCommand(int i, StringOperations command, StringProcessing[] sps)
+        private static void ParseCommand(StringOperations command, StringProcessing sp)
         {
             switch (command)
             {
                 case StringOperations.Uppercase:
-                    sps[i].EnqueueAction(sps[i].UpperCase);
+                    sp.EnqueueAction(sp.UpperCase);
                     break;
 
                 case StringOperations.Sort:
-                    sps[i].EnqueueAction(sps[i].Sort);
+                    sp.EnqueueAction(sp.Sort);
                     break;
 
                 case StringOperations.LowerCase:
-                    sps[i].EnqueueAction(sps[i].LowerCase);
+                    sp.EnqueueAction(sp.LowerCase);
                     break;
 
                 case StringOperations.Invert:
-                    sps[i].EnqueueAction(sps[i].Invert);
+                    sp.EnqueueAction(sp.Invert);
                     break;
-
                 default:
-                    break;
+                    throw new NotImplementedException();
             }
         }
 
-        private static void WriteToFile(String filename)
+        public static void WriteToFile(String filename)
         {
             System.IO.File.WriteAllLines(filename, Array.ConvertAll(strings.ToArray(), x => x.ToString()));
         }

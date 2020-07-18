@@ -1,46 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 
 namespace ParallelStringProcessing.Classes
 {
-    internal class StringProcessing : IStringProcessingMethods
+    internal class StringProcessing
     {
-        private StringBuilder s;
         private Queue<Action> commands = new Queue<Action>();
 
         #region String Operations
 
+        public StringBuilder S { get; set; }
         public void Sort()
         {
-            var sortedLetters = s.ToString().ToCharArray();
+            var sortedLetters = S.ToString().ToCharArray();
             Array.Sort(sortedLetters);
-            s.Clear();
-            s.Append(new string(sortedLetters));
+            S.Clear();
+            S.Append(new string(sortedLetters));
         }
 
         public void Invert()
         {
-            for (int i = 0, j = s.Length - 1; i < j; i++, j--)
+            for (int i = 0, j = S.Length - 1; i < j; i++, j--)
             {
-                (s[i], s[j]) = (s[j], s[i]);
+                (S[i], S[j]) = (S[j], S[i]);
             }
         }
 
         public void UpperCase()
         {
-            for (int i = 0; i < s.Length; i++)
+            for (int i = 0; i < S.Length; i++)
             {
-                s[i] = char.ToUpper(s[i]);
+                S[i] = char.ToUpper(S[i]);
             }
         }
 
         public void LowerCase()
         {
-            for (int i = 0; i < s.Length; i++)
+            for (int i = 0; i < S.Length; i++)
             {
-                s[i] = char.ToLower(s[i]);
+                S[i] = char.ToLower(S[i]);
             }
         }
 
@@ -67,6 +68,8 @@ namespace ParallelStringProcessing.Classes
         public void EnqueueAction(Action action)
         {
             //check if valid
+            if(action.Target==null)
+                MessageBox.Show("invalid action "+action.ToString());
             commands.Enqueue(action);
         }
 
@@ -77,21 +80,13 @@ namespace ParallelStringProcessing.Classes
 
         public StringProcessing(StringBuilder s)
         {
-            this.s = s;
+            this.S = s;
         }
 
         public StringProcessing()
         {
         }
 
-        public void SetString(StringBuilder s)
-        {
-            this.s = s;
-        }
-
-        public StringBuilder GetString()
-        {
-            return s;
-        }
+        
     }
 }

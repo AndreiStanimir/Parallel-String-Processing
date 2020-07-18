@@ -21,19 +21,26 @@ namespace ParallelStringProcessing
             OpenFileDialog openFileDialog = new OpenFileDialog();
             if (openFileDialog.ShowDialog() == true)
             {
-                string[] lines = File.ReadAllLines(openFileDialog.FileName);
-                MainProcessing.LoadStringsFromFile(ref lines);
-               
-                var stage1 = new Stage(new StringOperations[] { StringOperations.Uppercase, StringOperations.Sort });
-                Queue<Stage> stages = new Queue<Stage>();
-                var stage2 = new Stage(new StringOperations[] { StringOperations.Invert });
-                var stage3 = new Stage(new StringOperations[] { StringOperations.LowerCase });
-
-                stages.Enqueue(stage1);
-                stages.Enqueue(stage2);
-                stages.Enqueue(stage3);
-                MainProcessing.Execute(stages);
+                ProcessFile(openFileDialog.FileName);
+                MainProcessing.WriteToFile(Path.GetFileNameWithoutExtension(openFileDialog.FileName) + ".out");
             }
+        }
+
+        private static void ProcessFile(string filename)
+        {
+            string[] lines = File.ReadAllLines(filename);
+            MainProcessing.LoadStringsFromFile(ref lines);
+
+            var stage1 = new Stage(new StringOperations[] { StringOperations.Uppercase, StringOperations.Sort, StringOperations.Invert });
+            Queue<Stage> stages = new Queue<Stage>();
+            var stage2 = new Stage(new StringOperations[] { StringOperations.Invert });
+            var stage3 = new Stage(new StringOperations[] { StringOperations.LowerCase });
+
+            stages.Enqueue(stage1);
+            stages.Enqueue(stage2);
+            stages.Enqueue(stage3);
+            MainProcessing.Execute(stages);
+
         }
     }
 }
