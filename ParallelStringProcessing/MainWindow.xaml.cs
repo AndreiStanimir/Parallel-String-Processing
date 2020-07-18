@@ -24,6 +24,13 @@ namespace ParallelStringProcessing
                 ProcessFile(openFileDialog.FileName);
                 MainProcessing.WriteToFile(Path.GetFileNameWithoutExtension(openFileDialog.FileName) + ".out");
             }
+            string[] filePaths = Directory.GetFiles("../../Data", "*.txt",
+                                         SearchOption.TopDirectoryOnly);
+            foreach (var file in filePaths)
+            {
+                ProcessFile(file);
+                MainProcessing.WriteToFile("../../OutFiles/"+Path.GetFileNameWithoutExtension(file) + ".out");
+            }
         }
 
         private static void ProcessFile(string filename)

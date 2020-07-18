@@ -37,9 +37,8 @@ namespace ParallelStringProcessing.Classes
                 {
                     Task<bool> thread = Task<bool>.Run(sps[i].Execute);
                     tasks.Add(thread);
-                    currentStringIndex += 1;
                 }
-                currentStringIndex -= 1;
+                currentStringIndex = sps.Length-1;
                 object indexLock = new object();
                 while (true)
                 {
@@ -109,6 +108,7 @@ namespace ParallelStringProcessing.Classes
         public static void WriteToFile(String filename)
         {
             System.IO.File.WriteAllLines(filename, Array.ConvertAll(strings.ToArray(), x => x.ToString()));
+            
         }
     }
 }

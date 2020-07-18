@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows;
@@ -72,7 +73,12 @@ namespace ParallelStringProcessing.Classes
                 MessageBox.Show("invalid action "+action.ToString());
             commands.Enqueue(action);
         }
-
+        public Action DequeAction()
+        {
+            if (commands.Count == 0)
+                return null;
+            return commands.Dequeue();
+        }
         public void SetQueue(Queue<Action> actions)
         {
             commands = actions;

@@ -99,5 +99,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Data\10_lines.txt" />
+    <Resource Include="Data\10_short_lines.txt" />
+    <Resource Include="Data\1k_lines.txt" />
+    <Resource Include="Data\no_text.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
