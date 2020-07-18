@@ -10,8 +10,8 @@ namespace ParallelStringProcessing.Classes
     internal static class MainProcessing
     {
         private const int NUMBER_OF_THREADS = 5;
-
         private static StringProcessing[] sps;
+
         private static List<StringBuilder> strings;
         private static int currentStringIndex;
 
@@ -49,14 +49,13 @@ namespace ParallelStringProcessing.Classes
                         currentStringIndex += 1;
                         if (currentStringIndex < strings.Count)
                         {
-                            sps[index].S=strings[currentStringIndex];
+                            sps[index].S = strings[currentStringIndex];
                             tasks[index] = Task<bool>.Run(sps[index].Execute);
                         }
                         else
                             break;
                     }
                 }
-
                 Task.WaitAll(tasks.ToArray());
             }
         }
@@ -74,7 +73,7 @@ namespace ParallelStringProcessing.Classes
                     {
                         ParseCommand(command, sps[i]);
                     }
-                    catch(NotImplementedException e)
+                    catch (NotImplementedException e)
                     {
                         MessageBox.Show(e.Message);
                     }
@@ -101,6 +100,7 @@ namespace ParallelStringProcessing.Classes
                 case StringOperations.Invert:
                     sp.EnqueueAction(sp.Invert);
                     break;
+
                 default:
                     throw new NotImplementedException();
             }
