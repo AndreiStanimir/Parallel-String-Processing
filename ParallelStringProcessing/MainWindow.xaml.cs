@@ -30,7 +30,7 @@ namespace ParallelStringProcessing
             foreach (var file in filePaths)
             {
                 ProcessFile(file);
-                MainProcessing.WriteToFile("../../OutFiles/"+Path.GetFileNameWithoutExtension(file) + ".out");
+                MainProcessing.WriteToFile("../../OutFiles/" + Path.GetFileNameWithoutExtension(file) + ".out");
             }
         }
 
@@ -55,7 +55,6 @@ namespace ParallelStringProcessing
             {
                 MessageBox.Show(e.Message);
             }
-
         }
     }
 }

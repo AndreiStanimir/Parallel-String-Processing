@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using System.Text;
-using System.Windows;
 
 namespace ParallelStringProcessing.Classes
 {
@@ -13,52 +10,57 @@ namespace ParallelStringProcessing.Classes
 
         #region String Operations
 
-        public StringBuilder S { get; set; }
-        public void Sort()
-        {
-            var sortedLetters = S.ToString().ToCharArray();
-            Array.Sort(sortedLetters);
-            S.Clear();
-            S.Append(new string(sortedLetters));
-        }
+        private StringBuilder s;
+
+        public StringBuilder GetString() { return s; }  
+        public void SetString(StringBuilder s) { this.s = s; }
 
         public void Invert()
         {
-            for (int i = 0, j = S.Length - 1; i < j; i++, j--)
+            for (int i = 0, j = s.Length - 1; i < j; i++, j--)
             {
-                (S[i], S[j]) = (S[j], S[i]);
-            }
-        }
-
-        public void UpperCase()
-        {
-            for (int i = 0; i < S.Length; i++)
-            {
-                S[i] = char.ToUpper(S[i]);
+                (s[i], s[j]) = (s[j], s[i]);
             }
         }
 
         public void LowerCase()
         {
-            for (int i = 0; i < S.Length; i++)
+            for (int i = 0; i < s.Length; i++)
             {
-                S[i] = char.ToLower(S[i]);
+                s[i] = char.ToLower(s[i]);
+            }
+        }
+
+        public void Sort()
+        {
+            var sortedLetters = s.ToString().ToCharArray();
+            Array.Sort(sortedLetters);
+            s.Clear();
+            s.Append(new string(sortedLetters));
+        }
+
+        public void UpperCase()
+        {
+            for (int i = 0; i < s.Length; i++)
+            {
+                s[i] = char.ToUpper(s[i]);
             }
         }
 
         #endregion String Operations
 
-        public bool Execute() 
+        public StringProcessing(StringBuilder s)
         {
+            this.s = s;
+        }
 
-                var commands = new Queue<Action>(this.commands);
-                while (commands.Count > 0)
-                {
-                    commands.Dequeue().Invoke();
-                }
-            
-            
-            return true;
+        public Action DequeAction()
+        {
+            if (commands.Count == 0)
+            {
+                return null;
+            }
+            return commands.Dequeue();
         }
 
         public void EnqueueAction(Action action)
@@ -70,28 +72,21 @@ namespace ParallelStringProcessing.Classes
             }
             commands.Enqueue(action);
         }
-        public Action DequeAction()
+
+        public bool Execute()
         {
-            if (commands.Count == 0)
+            var commands = new Queue<Action>(this.commands);
+            while (commands.Count > 0)
             {
-                return null;
+                commands.Dequeue().Invoke();
             }
-            return commands.Dequeue();
+
+            return true;
         }
+
         public void SetQueue(Queue<Action> actions)
         {
             commands = actions;
         }
-
-        public StringProcessing(StringBuilder s)
-        {
-            this.S = s;
-        }
-
-        public StringProcessing()
-        {
-        }
-
-        
     }
 }

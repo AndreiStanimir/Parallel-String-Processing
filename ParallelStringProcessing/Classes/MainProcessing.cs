@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace ParallelStringProcessing.Classes
 {
@@ -48,7 +47,7 @@ namespace ParallelStringProcessing.Classes
                         currentStringIndex += 1;
                         if (currentStringIndex < strings.Count)
                         {
-                            sps[index].S = strings[currentStringIndex];
+                            sps[index].SetString(strings[currentStringIndex]);
                             tasks[index] = Task<bool>.Run(sps[index].Execute);
                         }
                         else
@@ -61,7 +60,7 @@ namespace ParallelStringProcessing.Classes
             }
         }
 
-        private static void InitializeStringProcesssingCommands(Queue<Stage> stages) 
+        private static void InitializeStringProcesssingCommands(Queue<Stage> stages)
         {
             List<StringOperations> currentStage = stages.Dequeue().Operations.ToList();
             currentStringIndex = 0;
@@ -70,9 +69,7 @@ namespace ParallelStringProcessing.Classes
                 sps[i] = new StringProcessing(strings[i]);
                 foreach (var command in currentStage)
                 {
-
                     ParseCommand(command, sps[i]);
-
                 }
             }
         }
@@ -105,7 +102,6 @@ namespace ParallelStringProcessing.Classes
         public static void WriteToFile(String filename)
         {
             System.IO.File.WriteAllLines(filename, Array.ConvertAll(strings.ToArray(), x => x.ToString()));
-
         }
     }
 }
