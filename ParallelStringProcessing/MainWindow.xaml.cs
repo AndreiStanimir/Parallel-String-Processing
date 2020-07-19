@@ -26,7 +26,6 @@ namespace ParallelStringProcessing
                 try
                 {
                     ProcessFile(openFileDialog.FileName);
-                    MainProcessing.WriteToFile(Path.GetFileNameWithoutExtension(openFileDialog.FileName) + ".out");
                 }
                 catch (Exception ex)
                 {
@@ -39,15 +38,9 @@ namespace ParallelStringProcessing
             {
                 try
                 {
-                    var watch = System.Diagnostics.Stopwatch.StartNew();
 
                     ProcessFile(file);
-                    MainProcessing.WriteToFile("../../OutFiles/" + Path.GetFileNameWithoutExtension(file) + ".out");
-                    var label = new Label();
-                    watch.Stop();
-                    double elapsedMs = watch.ElapsedMilliseconds;
-                    label.Content = "File " + file + " finished after "+ elapsedMs +"ms";
-                    StackPanelCompletedTasks.Children.Add(label);
+                    
                 }
                 catch (Exception ex)
                 {
@@ -56,8 +49,9 @@ namespace ParallelStringProcessing
             }
         }
 
-        private static void ProcessFile(string filename)
+        private void ProcessFile(string filename)
         {
+            var watch = System.Diagnostics.Stopwatch.StartNew();
             string[] lines = File.ReadAllLines(filename);
             MainProcessing.LoadStringsFromFile(ref lines);
 
@@ -71,8 +65,13 @@ namespace ParallelStringProcessing
             stages.Enqueue(stage3);
            
                 MainProcessing.Execute(stages);
-            
-          
+
+            MainProcessing.WriteToFile("../../OutFiles/" + Path.GetFileNameWithoutExtension(filename) + ".out");
+            var label = new Label();
+            watch.Stop();
+            double elapsedMs = watch.ElapsedMilliseconds;
+            label.Content = "File " + filename + " finished after " + elapsedMs + "ms";
+            StackPanelCompletedTasks.Children.Add(label);
         }
     }
 }
