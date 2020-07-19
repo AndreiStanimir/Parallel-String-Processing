@@ -38,9 +38,7 @@ namespace ParallelStringProcessing
             {
                 try
                 {
-
                     ProcessFile(file);
-                    
                 }
                 catch (Exception ex)
                 {
@@ -63,8 +61,8 @@ namespace ParallelStringProcessing
             stages.Enqueue(stage1);
             stages.Enqueue(stage2);
             stages.Enqueue(stage3);
-           
-                MainProcessing.Execute(stages);
+
+            MainProcessing.Execute(stages);
 
             MainProcessing.WriteToFile("../../OutFiles/" + Path.GetFileNameWithoutExtension(filename) + ".out");
             var label = new Label();
