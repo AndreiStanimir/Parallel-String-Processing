@@ -32,19 +32,6 @@ namespace ParallelStringProcessing
                     MessageBox.Show(ex.Message);
                 }
             }
-            string[] filePaths = Directory.GetFiles("../../Data", "*.txt",
-                                         SearchOption.TopDirectoryOnly);
-            foreach (var file in filePaths)
-            {
-                try
-                {
-                    ProcessFile(file);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            }
         }
 
         private void ProcessFile(string filename)
@@ -68,8 +55,29 @@ namespace ParallelStringProcessing
             var label = new Label();
             watch.Stop();
             double elapsedMs = watch.ElapsedMilliseconds;
-            label.Content = "File " + filename + " finished after " + elapsedMs + "ms";
+            label.Content = "File " + Path.GetFileName(filename) + " finished after " + elapsedMs + "ms";
             StackPanelCompletedTasks.Children.Add(label);
+            if (label.ActualHeight > StackPanelCompletedTasks.ActualHeight)
+            {
+                StackPanelCompletedTasks.Children.RemoveAt(0);
+            }
+        }
+
+        private void button1_Click(object sender, RoutedEventArgs e)
+        {
+            string[] filePaths = Directory.GetFiles("../../Data", "*.txt",
+                                        SearchOption.TopDirectoryOnly);
+            foreach (var file in filePaths)
+            {
+                try
+                {
+                    ProcessFile(file);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
         }
     }
 }
