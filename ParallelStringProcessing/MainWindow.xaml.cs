@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace ParallelStringProcessing
 {
@@ -22,15 +23,36 @@ namespace ParallelStringProcessing
             OpenFileDialog openFileDialog = new OpenFileDialog();
             if (openFileDialog.ShowDialog() == true)
             {
-                ProcessFile(openFileDialog.FileName);
-                MainProcessing.WriteToFile(Path.GetFileNameWithoutExtension(openFileDialog.FileName) + ".out");
+                try
+                {
+                    ProcessFile(openFileDialog.FileName);
+                    MainProcessing.WriteToFile(Path.GetFileNameWithoutExtension(openFileDialog.FileName) + ".out");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
             string[] filePaths = Directory.GetFiles("../../Data", "*.txt",
                                          SearchOption.TopDirectoryOnly);
             foreach (var file in filePaths)
             {
-                ProcessFile(file);
-                MainProcessing.WriteToFile("../../OutFiles/" + Path.GetFileNameWithoutExtension(file) + ".out");
+                try
+                {
+                    var watch = System.Diagnostics.Stopwatch.StartNew();
+
+                    ProcessFile(file);
+                    MainProcessing.WriteToFile("../../OutFiles/" + Path.GetFileNameWithoutExtension(file) + ".out");
+                    var label = new Label();
+                    watch.Stop();
+                    double elapsedMs = watch.ElapsedMilliseconds;
+                    label.Content = "File " + file + " finished after "+ elapsedMs +"ms";
+                    StackPanelCompletedTasks.Children.Add(label);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
         }
 
@@ -47,14 +69,10 @@ namespace ParallelStringProcessing
             stages.Enqueue(stage1);
             stages.Enqueue(stage2);
             stages.Enqueue(stage3);
-            try
-            {
+           
                 MainProcessing.Execute(stages);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
+            
+          
         }
     }
 }
