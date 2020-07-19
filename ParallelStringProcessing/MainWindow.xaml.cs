@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using ParallelStringProcessing.Classes;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
@@ -46,7 +47,14 @@ namespace ParallelStringProcessing
             stages.Enqueue(stage1);
             stages.Enqueue(stage2);
             stages.Enqueue(stage3);
-            MainProcessing.Execute(stages);
+            try
+            {
+                MainProcessing.Execute(stages);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
 
         }
     }

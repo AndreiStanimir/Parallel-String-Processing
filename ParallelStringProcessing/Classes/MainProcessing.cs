@@ -38,7 +38,7 @@ namespace ParallelStringProcessing.Classes
                     Task<bool> thread = Task<bool>.Run(sps[i].Execute);
                     tasks.Add(thread);
                 }
-                currentStringIndex = sps.Length-1;
+                currentStringIndex = sps.Length - 1;
                 object indexLock = new object();
                 while (true)
                 {
@@ -52,14 +52,16 @@ namespace ParallelStringProcessing.Classes
                             tasks[index] = Task<bool>.Run(sps[index].Execute);
                         }
                         else
+                        {
                             break;
+                        }
                     }
                 }
                 Task.WaitAll(tasks.ToArray());
             }
         }
 
-        private static void InitializeStringProcesssingCommands(Queue<Stage> stages)
+        private static void InitializeStringProcesssingCommands(Queue<Stage> stages) 
         {
             List<StringOperations> currentStage = stages.Dequeue().Operations.ToList();
             currentStringIndex = 0;
@@ -68,14 +70,9 @@ namespace ParallelStringProcessing.Classes
                 sps[i] = new StringProcessing(strings[i]);
                 foreach (var command in currentStage)
                 {
-                    try
-                    {
-                        ParseCommand(command, sps[i]);
-                    }
-                    catch (NotImplementedException e)
-                    {
-                        MessageBox.Show(e.Message);
-                    }
+
+                    ParseCommand(command, sps[i]);
+
                 }
             }
         }
@@ -108,7 +105,7 @@ namespace ParallelStringProcessing.Classes
         public static void WriteToFile(String filename)
         {
             System.IO.File.WriteAllLines(filename, Array.ConvertAll(strings.ToArray(), x => x.ToString()));
-            
+
         }
     }
 }

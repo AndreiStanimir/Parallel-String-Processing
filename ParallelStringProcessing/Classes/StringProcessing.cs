@@ -48,35 +48,34 @@ namespace ParallelStringProcessing.Classes
 
         #endregion String Operations
 
-        public bool Execute()
+        public bool Execute() 
         {
-            try
-            {
+
                 var commands = new Queue<Action>(this.commands);
                 while (commands.Count > 0)
                 {
                     commands.Dequeue().Invoke();
                 }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-                return false;
-            }
+            
+            
             return true;
         }
 
         public void EnqueueAction(Action action)
         {
             //check if valid
-            if(action.Target==null)
-                MessageBox.Show("invalid action "+action.ToString());
+            if (action.Target == null)
+            {
+                throw new Exception("invalid action " + action.ToString());
+            }
             commands.Enqueue(action);
         }
         public Action DequeAction()
         {
             if (commands.Count == 0)
+            {
                 return null;
+            }
             return commands.Dequeue();
         }
         public void SetQueue(Queue<Action> actions)

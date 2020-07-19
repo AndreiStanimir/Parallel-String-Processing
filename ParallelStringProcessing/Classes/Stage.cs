@@ -16,7 +16,9 @@ namespace ParallelStringProcessing.Classes
         public Stage(StringOperations[] operations)
         {
             if (operations.Count() > 5)
+            {
                 Array.Resize(ref operations, 5);
+            }
             this.Operations = new Queue<StringOperations>(operations);
         }
     }

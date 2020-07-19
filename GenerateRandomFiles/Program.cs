@@ -12,7 +12,7 @@ namespace GenerateRandomFiles
             return new string(Enumerable.Repeat(chars, length)
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
-        static void Main(string[] args)
+        static void Main()
         {
             const int lineLength = 1000;
             WriteTo("no_text.txt", 0, lineLength);
