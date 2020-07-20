@@ -21,5 +21,13 @@ namespace ParallelStringProcessing.Classes
             }
             this.Operations = new Queue<StringOperations>(operations);
         }
+        public Stage(Stage stage)
+        {
+            this.Operations = new Queue<StringOperations>(stage.Operations);
+        }
+        internal void Enqueue(StringOperations operation)
+        {
+            Operations.Enqueue(operation);
+        }
     }
 }

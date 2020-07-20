@@ -8,7 +8,7 @@ namespace ParallelStringProcessing.Classes
 {
     internal static class MainProcessing
     {
-        private const int NUMBER_OF_THREADS = 5;
+        private const int NUMBER_OF_THREADS = 1;
         private static StringProcessing[] sps;
 
         private static List<StringBuilder> strings;
@@ -26,16 +26,24 @@ namespace ParallelStringProcessing.Classes
         public static void Execute(Queue<Stage> stages)
         {
             sps = new StringProcessing[Math.Min(NUMBER_OF_THREADS, strings.Count)];
-
+            InitializeStringProcesssingCommands(stages);
+            List<Task<bool>> tasks = new List<Task<bool>>(NUMBER_OF_THREADS);
+            for (int i = 0; i < sps.Length; i++)
+            {
+                tasks.Add(new Task<bool>(sps[i].Execute));
+            }
             while (stages.Count > 0)
             {
-                InitializeStringProcesssingCommands(stages);
-
-                List<Task<bool>> tasks = new List<Task<bool>>(NUMBER_OF_THREADS);
+                var stage = stages.Dequeue();
+                currentStringIndex = 0;
                 for (int i = 0; i < sps.Length; i++)
                 {
-                    Task<bool> thread = Task<bool>.Run(sps[i].Execute);
-                    tasks.Add(thread);
+                    sps[i].SetString(strings[i]);
+                    sps[i].SetQueue(stage);
+                }
+                for (int i = 0; i < sps.Length; i++)
+                {
+                    tasks[i] = Task<bool>.Run(sps[i].Execute);
                 }
                 currentStringIndex = sps.Length - 1;
                 object indexLock = new object();
@@ -48,6 +56,7 @@ namespace ParallelStringProcessing.Classes
                         if (currentStringIndex < strings.Count)
                         {
                             sps[index].SetString(strings[currentStringIndex]);
+                            sps[index].SetQueue(stage);
                             tasks[index] = Task<bool>.Run(sps[index].Execute);
                         }
                         else
@@ -62,42 +71,13 @@ namespace ParallelStringProcessing.Classes
 
         private static void InitializeStringProcesssingCommands(Queue<Stage> stages)
         {
-            List<StringOperations> currentStage = stages.Dequeue().Operations.ToList();
-            currentStringIndex = 0;
             for (int i = 0; i < sps.Length; i++)
             {
                 sps[i] = new StringProcessing(strings[i]);
-                foreach (var command in currentStage)
-                {
-                    ParseCommand(command, sps[i]);
-                }
             }
         }
 
-        private static void ParseCommand(StringOperations command, StringProcessing sp)
-        {
-            switch (command)
-            {
-                case StringOperations.Uppercase:
-                    sp.EnqueueAction(sp.UpperCase);
-                    break;
-
-                case StringOperations.Sort:
-                    sp.EnqueueAction(sp.Sort);
-                    break;
-
-                case StringOperations.LowerCase:
-                    sp.EnqueueAction(sp.LowerCase);
-                    break;
-
-                case StringOperations.Invert:
-                    sp.EnqueueAction(sp.Invert);
-                    break;
-
-                default:
-                    throw new NotImplementedException();
-            }
-        }
+        
 
         public static void WriteToFile(String filename)
         {

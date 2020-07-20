@@ -40,7 +40,7 @@ namespace ParallelStringProcessing
             string[] lines = File.ReadAllLines(filename);
             MainProcessing.LoadStringsFromFile(ref lines);
 
-            var stage1 = new Stage(new StringOperations[] { StringOperations.Uppercase, StringOperations.Sort, StringOperations.Invert });
+            var stage1 = new Stage(new StringOperations[] { StringOperations.Uppercase, StringOperations.Sort });
             Queue<Stage> stages = new Queue<Stage>();
             var stage2 = new Stage(new StringOperations[] { StringOperations.Invert });
             var stage3 = new Stage(new StringOperations[] { StringOperations.LowerCase });

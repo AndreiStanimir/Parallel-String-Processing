@@ -63,10 +63,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Classes\IStringProcessor.cs" />
     <Compile Include="Classes\MainProcessing.cs" />
     <Compile Include="Classes\Stage.cs" />
     <Compile Include="Classes\StringOperations.cs" />
     <Compile Include="Classes\StringProcessing.cs" />
+    <Compile Include="Classes\StringProcessingAPI.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
