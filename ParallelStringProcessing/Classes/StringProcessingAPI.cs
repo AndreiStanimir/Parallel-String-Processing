@@ -83,5 +83,6 @@ namespace ParallelStringProcessing.Classes
                 s[i] = char.ToUpper(s[i]);
             }
         }
+
     }
 }

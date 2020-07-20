@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.30309.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParallelStringProcessing", "ParallelStringProcessing\ParallelStringProcessing.csproj", "{8D756DCB-9A97-4837-AF4D-290A33C9D3C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateRandomFiles", "GenerateRandomFiles\GenerateRandomFiles.csproj", "{1ED1CD3B-EB02-4728-974C-7BC08356A84F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenerateRandomFiles", "GenerateRandomFiles\GenerateRandomFiles.csproj", "{1ED1CD3B-EB02-4728-974C-7BC08356A84F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StringProcessingAPI", "StringProcessingAPI\StringProcessingAPI.csproj", "{BBDE2318-D999-4C44-B5D7-48E6F69E908C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{1ED1CD3B-EB02-4728-974C-7BC08356A84F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1ED1CD3B-EB02-4728-974C-7BC08356A84F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1ED1CD3B-EB02-4728-974C-7BC08356A84F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBDE2318-D999-4C44-B5D7-48E6F69E908C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBDE2318-D999-4C44-B5D7-48E6F69E908C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBDE2318-D999-4C44-B5D7-48E6F69E908C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBDE2318-D999-4C44-B5D7-48E6F69E908C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
