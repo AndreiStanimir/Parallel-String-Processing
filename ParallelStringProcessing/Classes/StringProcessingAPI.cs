@@ -6,6 +6,7 @@ namespace ParallelStringProcessing.Classes
 {
     internal class StringProcessingAPI 
     {
+
         public static StringBuilder ProcessLine(StringBuilder line, Queue<Stage> stages)
         {
             while (stages.Count > 0)

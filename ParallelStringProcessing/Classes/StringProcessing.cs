@@ -35,11 +35,6 @@ namespace ParallelStringProcessing.Classes
 
         public void EnqueueAction(StringOperations operation)
         {
-            //check if valid
-            //if (action == null)
-            //{
-            //    throw new Exception("invalid action " + action.ToString());
-            //}
             commands.Enqueue(operation);
         }
 
