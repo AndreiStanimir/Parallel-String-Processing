@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace ParallelStringProcessing.Classes
@@ -10,9 +9,15 @@ namespace ParallelStringProcessing.Classes
 
         private StringBuilder s;
 
-        public StringBuilder GetString() { return s; }
+        public StringBuilder GetString()
+        {
+            return s;
+        }
 
-        public void SetString(StringBuilder s) { this.s = s; }
+        public void SetString(StringBuilder s)
+        {
+            this.s = s;
+        }
 
         public StringProcessing(StringBuilder s)
         {
@@ -40,7 +45,7 @@ namespace ParallelStringProcessing.Classes
 
         public bool Execute()
         {
-            StringProcessingAPI.ProcessLine(ref s,commands);
+            StringProcessingAPI.ProcessLine(ref s, commands);
             return true;
         }
 

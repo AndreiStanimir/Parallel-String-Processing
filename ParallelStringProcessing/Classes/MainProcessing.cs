@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,7 +7,7 @@ namespace ParallelStringProcessing.Classes
 {
     internal static class MainProcessing
     {
-        private const int NUMBER_OF_THREADS = 1;
+        private const int NUMBER_OF_THREADS = 5;
         private static StringProcessing[] sps;
 
         private static List<StringBuilder> strings;
@@ -76,8 +75,6 @@ namespace ParallelStringProcessing.Classes
                 sps[i] = new StringProcessing(strings[i]);
             }
         }
-
-        
 
         public static void WriteToFile(String filename)
         {

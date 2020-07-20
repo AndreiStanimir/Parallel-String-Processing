@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ParallelStringProcessing.Classes
 {
@@ -10,11 +8,10 @@ namespace ParallelStringProcessing.Classes
     {
         public static StringBuilder ProcessLine(StringBuilder line, Queue<Stage> stages)
         {
-
             while (stages.Count > 0)
             {
                 var stage = stages.Dequeue();
-                ProcessLine(ref line,stage);
+                ProcessLine(ref line, stage);
             }
             return line;
         }
@@ -25,10 +22,10 @@ namespace ParallelStringProcessing.Classes
             foreach (var op in operations)
             {
                 ParseCommand(ref line, op);
-
             }
             return line;
         }
+
         private static void ParseCommand(ref StringBuilder line, StringOperations command)
         {
             switch (command)
@@ -53,6 +50,7 @@ namespace ParallelStringProcessing.Classes
                     throw new NotImplementedException();
             }
         }
+
         private static void Invert(ref StringBuilder s)
         {
             for (int i = 0, j = s.Length - 1; i < j; i++, j--)
