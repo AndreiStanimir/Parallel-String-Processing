@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ParallelStringProcessing.Classes
 {
-    internal class StringProcessingAPI : IStringProcessor
+    internal class StringProcessingAPI 
     {
         public static StringBuilder ProcessLine(StringBuilder line, Queue<Stage> stages)
         {
