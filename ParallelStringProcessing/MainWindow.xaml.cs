@@ -50,7 +50,7 @@ namespace ParallelStringProcessing
             stages.Enqueue(stage2);
             stages.Enqueue(stage3);
 
-            var result=await MainProcessing.ExecuteWebAPI(stages);
+            var result = await MainProcessing.ExecuteWebAPI(stages);
 
             MainProcessing.WriteToFile("../../OutFiles/" + Path.GetFileNameWithoutExtension(filename) + ".out");
             var label = new Label();

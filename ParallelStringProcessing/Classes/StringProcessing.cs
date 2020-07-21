@@ -40,7 +40,7 @@ namespace ParallelStringProcessing.Classes
 
         public bool Execute()
         {
-            StringProcessingAPI.ProcessLine(ref s, commands);
+            //StringProcessingAPI.ProcessLine(ref s, commands);
             return true;
         }
 

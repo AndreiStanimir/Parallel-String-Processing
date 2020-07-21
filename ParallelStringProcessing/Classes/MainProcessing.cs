@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media;
 
 namespace ParallelStringProcessing.Classes
 {
@@ -72,7 +70,9 @@ namespace ParallelStringProcessing.Classes
                 Task.WaitAll(tasks.ToArray());
             }
         }
-        static HttpClient client = new HttpClient();
+
+        private static HttpClient client = new HttpClient();
+
         public static async Task<bool> ExecuteWebAPI(Queue<Stage> stages)
         {
             if (client.BaseAddress == null)
@@ -82,76 +82,27 @@ namespace ParallelStringProcessing.Classes
                 client.DefaultRequestHeaders.Accept.Add(
                     new MediaTypeWithQualityHeaderValue("application/json"));
             }
-            //List<Task<StringBuilder>> tasks = new List<Task<StringBuilder>>(NUMBER_OF_THREADS);
             try
             {
-
                 while (stages.Count > 0)
                 {
                     var stage = stages.Dequeue();
-
-                    currentStringIndex = 0;
-                    //var sbs = new StringBuilder[NUMBER_OF_THREADS];
-                    //for (int i = 0; i < sbs.Length; i++)
-                    //{
-                    //    //sps[i].SetString(strings[i]);
-                    //    //sps[i].SetQueue(stage);
-                    //    sbs[i]=strings[i];
-                    //}
-                    var newStrings = new ConcurrentBag<StringBuilder>();
-                    //Parallel.ForEach(strings,
-                    //    new ParallelOptions { MaxDegreeOfParallelism = 5 },
-                    //    async s =>
-                    //    {
-                    //        var result = await GetProcessedStringAsync(s, stage.Operations.ToArray());
-                    //        newStrings.Add(result);
-                    //    });
-                    var tasks=strings.AsParallel().WithDegreeOfParallelism(1).Select(async s =>
-                        {
-                            var result = await GetProcessedStringAsync(s, stage.Operations.ToArray());
-                            newStrings.Add(result);
-                        });
+                    var tasks = strings.AsParallel().WithDegreeOfParallelism(5).Select(async s =>
+                          {
+                              var result = await GetProcessedStringAsync(s, stage.Operations.ToArray());
+                          });
                     await Task.WhenAll(tasks);
-                    //for (int i = 0; i < sbs.Length; i++)
-                    //{
-                    //    tasks.Add( Task<StringBuilder>.Run(() => GetProductAsync(sbs[i],stage.Operations.ToArray())));
-                    //}
-                    //currentStringIndex = sbs.Length - 1;
-                    //object indexLock = new object();
-                    //while (true)
-                    //{
-                    //    int index = Task.WaitAny(tasks.ToArray());
-                    //    lock (indexLock)
-                    //    {
-                    //        currentStringIndex += 1;
-                    //        if (currentStringIndex < strings.Count)
-                    //        {
-                    //            //sps[index].SetString(strings[currentStringIndex]);
-                    //            //sps[index].SetQueue(stage);
-
-                    //            sbs[index] = strings[currentStringIndex];
-                    //            tasks[index] = Task<bool>.Run(() => GetProcessedStringAsync(sbs[index], stage.Operations.ToArray()));
-                    //        }
-                    //        else
-                    //        {
-                    //            break;
-                    //        }
-                    //    }
-                    //}
-                    //Task.WaitAll(tasks.ToArray());
                 }
-
             }
             catch (Exception e)
             {
                 return false;
                 throw e;
-                Console.WriteLine(e.Message);
             }
             return true;
         }
 
-        static async Task<StringBuilder> GetProcessedStringAsync(StringBuilder line, StringOperations[] operations)
+        private static async Task<StringBuilder> GetProcessedStringAsync(StringBuilder line, StringOperations[] operations)
         {
             int[] op = new int[operations.Length];
             string requestUri = string.Format("https://localhost:44380/api/values/?s={0}", line.ToString());

@@ -1,11 +1,9 @@
-﻿using System;
+﻿using ParallelStringProcessing.Classes;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Text;
 using System.Web.Http;
-using ParallelStringProcessing.Classes;
+
 namespace StringProcessingAPI.Controllers
 {
     public class ValuesController : ApiController
@@ -25,10 +23,10 @@ namespace StringProcessingAPI.Controllers
             foreach (var op in operations)
             {
                 tmp.Append(op.ToString());
-                ParseCommand(ref result, (StringOperations) op);
+                ParseCommand(ref result, (StringOperations)op);
             }
             return result.ToString();
-        }        
+        }
 
         private void ParseCommand(ref StringBuilder line, StringOperations command)
         {
@@ -91,6 +89,7 @@ namespace StringProcessingAPI.Controllers
         {
             return "worked";
         }
+
         // POST api/values
         public void Post([FromBody] string value)
         {
