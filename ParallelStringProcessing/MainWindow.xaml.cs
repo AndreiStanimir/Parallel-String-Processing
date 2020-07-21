@@ -3,6 +3,7 @@ using ParallelStringProcessing.Classes;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -34,7 +35,7 @@ namespace ParallelStringProcessing
             }
         }
 
-        private void ProcessFile(string filename)
+        private async Task<bool> ProcessFile(string filename)
         {
             var watch = System.Diagnostics.Stopwatch.StartNew();
             string[] lines = File.ReadAllLines(filename);
@@ -49,7 +50,7 @@ namespace ParallelStringProcessing
             stages.Enqueue(stage2);
             stages.Enqueue(stage3);
 
-            MainProcessing.Execute(stages);
+            var result=await MainProcessing.ExecuteWebAPI(stages);
 
             MainProcessing.WriteToFile("../../OutFiles/" + Path.GetFileNameWithoutExtension(filename) + ".out");
             var label = new Label();
@@ -61,9 +62,10 @@ namespace ParallelStringProcessing
             {
                 StackPanelCompletedTasks.Children.RemoveAt(0);
             }
+            return true;
         }
 
-        private void button1_Click(object sender, RoutedEventArgs e)
+        private async void button1_Click(object sender, RoutedEventArgs e)
         {
             string[] filePaths = Directory.GetFiles("../../Data", "*.txt",
                                         SearchOption.TopDirectoryOnly);
@@ -71,7 +73,7 @@ namespace ParallelStringProcessing
             {
                 try
                 {
-                    ProcessFile(file);
+                    await ProcessFile(file);
                 }
                 catch (Exception ex)
                 {
