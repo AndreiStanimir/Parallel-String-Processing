@@ -10,11 +10,11 @@ You will have to implement an application which receives the path to a file cont
 
 - It will be 3 stageswhich will be run in sequence
 - Any of following operations are possible to be added on each stage:
-- Lowercase – will convert all letters to lowercase
-- Uppercase – will convert all letters to uppercase
-- Sort – will sort letters within the line
-- Invert – will inverse the whole string line
-- Other operations can be added by the candidate
+  - Lowercase – will convert all letters to lowercase
+  - Uppercase – will convert all letters to uppercase
+  - Sort – will sort letters within the line
+  - Invert – will inverse the whole string line
+  - Other operations can be added by the candidate
 - Each stage should be easy configurable with the operations it will execute.
 - In order for any string to move the next stage, the previous stage needs to be completed for that specific string - you cannot run a string directly through all the 3 stages
 - At the end of the full processing cycle, when all the strings got through all the 3 stages, the String Processor notifies the caller that the processing is done
